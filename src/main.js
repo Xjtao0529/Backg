@@ -4,9 +4,11 @@ import 'element-plus/dist/index.css'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import './style/index.scss'
+import './styles/index.scss'
 import './iconfont/iconfont.css'
 import installIcons from './icons/index.js'
+import Vuex from 'vuex'
+import './permission'
 const app = createApp(App)
 installIcons(app)
-app.use(store).use(router).use(ElementPlus).mount('#app')
+app.use(store).use(router).use(ElementPlus).use(Vuex).mount('#app')

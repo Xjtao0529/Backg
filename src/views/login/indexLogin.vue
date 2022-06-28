@@ -41,15 +41,18 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
 import md5 from 'md5'
-import UserApi from '../../api/user'
-import { validatePassword } from './rules'
-
+import { useRouter } from 'vue-router'
+import { validatePassword } from './rule'
+import recursion from '../../utils/recursion'
+import { useStore } from 'vuex'
 const inputType = ref('password')
-const LoginForm = ref()
 const loginForm = reactive({
-  username: '',
-  password: ''
+  username: 'super-admin',
+  password: '123456'
 })
+const store = useStore()
+const LoginForm = ref(null)
+const router = useRouter()
 
 const loginRules = reactive({
   username: [
@@ -73,13 +76,12 @@ const passwordIconStatus = computed(() => {
 })
 const handleLoginSubmit = async () => {
   if (!LoginForm.value) return
-
   await LoginForm.value.validate(async (valid) => {
     if (valid) {
-      alert('登录')
-      loginForm.password = md5(loginForm.password)
-      const response = await UserApi.login(loginForm)
-      console.log(response)
+      const newlogin = recursion.deeCopy(loginForm)
+      newlogin.password = md5(newlogin.password)
+      const res = await store.dispatch('user/login', newlogin)
+      if (res.token) router.push('/')
     }
   })
 }
