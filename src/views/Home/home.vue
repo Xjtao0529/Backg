@@ -17,8 +17,8 @@
 <script setup>
 import variables from '@/styles/variables.module.scss'
 import Sidebar from '../../components/Sidebar/index.vue'
-import Navbar from '../../components/Navbar.vue'
-import AppMain from '../../components/AppMain.vue'
+import Navbar from '../../layout/Navbar.vue'
+import AppMain from '../../layout/AppMain.vue'
 
 </script>
 
