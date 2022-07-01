@@ -1,10 +1,11 @@
 import UserApi from '../../api/user'
-import { setItem, getItem } from '../../utils/storeage'
+import { setItem, getItem, removeItem } from '../../utils/storeage'
 export default {
   namespaced: true,
   state: () => ({
     token: getItem('token') || '',
-    userInfo: getItem('userInfo') || {}
+    userInfo: getItem('userInfo') || {},
+    userList: getItem('userList') || []
   }),
   mutations: {
     setToken(state, token) {
@@ -14,6 +15,10 @@ export default {
     setUSerInfo(state, userInfo) {
       state.userInfo = userInfo
       setItem('userInfo', userInfo)
+    },
+    setUSerList(state, userList) {
+      state.userList = userList
+      setItem('userList', userList)
     }
   },
 
@@ -31,6 +36,20 @@ export default {
       const res = await UserApi.getUserInfo()
       commit('setUSerInfo', res)
       return res
+    },
+    logout({ commit }) {
+      commit('setToken', '')
+      commit('setUSerInfo', {})
+      removeItem('token')
+      removeItem('userInfo')
+    },
+    async getUserList({ commit }, payload) {
+      try {
+        const res = await UserApi.getUserManage(payload)
+        console.log(1)
+        commit('setUSerList', res.list)
+        console.log(res)
+      } catch (error) {}
     }
   }
 }

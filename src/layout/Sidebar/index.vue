@@ -3,7 +3,7 @@
     <h3 style="height: 60px; color: #fff">
       <el-avatar
       class="tx"
-        shape="square"
+        shape="circle"
         :size="30"
         :src="store.getters.userInfo.avatar"
       ></el-avatar
@@ -31,5 +31,8 @@ h3 {
   position: absolute;
   top: 13px;
   left: 11px;
+}
+.el-avatar{
+  background: none ;
 }
 </style>

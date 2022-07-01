@@ -15,8 +15,16 @@ const getUserInfo = () => {
     method: 'get'
   })
 }
+const getUserManage = (data) => {
+  return request({
+    url: '/user-manage/all-list ',
+    method: 'get',
+    data
+  })
+}
 
 export default {
   login,
-  getUserInfo
+  getUserInfo,
+  getUserManage
 }

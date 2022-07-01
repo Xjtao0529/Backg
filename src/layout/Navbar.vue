@@ -1,25 +1,28 @@
 <template>
   <div class="navbar">
+    <div class="navbar-left">LEFT</div>
     <div class="right-menu">
       <!-- 头像 -->
-      <el-dropdown class="avatar-container" trigger="click">
+      <el-dropdown
+        class="avatar-container"
+        @command="handleCommand"
+        trigger="click"
+      >
         <div class="avatar-wrapper">
-          <el-avatar
-            shape="square"
-            :size="40"
-            :src="store.getters.userInfo.avatar"
-          ></el-avatar>
+          <el-avatar shape="square" :size="40" :src="avatarUrl"></el-avatar>
           <i class="el-icon-s-tools"></i>
         </div>
         <template #dropdown>
           <el-dropdown-menu class="user-dropdown">
             <router-link to="/">
-              <el-dropdown-item> 首页 </el-dropdown-item>
+              <el-dropdown-item command="home"> 首页 </el-dropdown-item>
             </router-link>
             <a target="_blank" href="">
-              <el-dropdown-item>课程主页</el-dropdown-item>
+              <el-dropdown-item command="profile">课程主页</el-dropdown-item>
             </a>
-            <el-dropdown-item divided> 退出登录 </el-dropdown-item>
+            <el-dropdown-item divided command="logout">
+              退出登录
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -28,9 +31,34 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 const store = useStore()
-console.log(store.getters.userInfo.avatar)
+const router = useRouter()
+const avatarUrl = computed(() => {
+  return store.getters.userInfo.avatar
+})
+const handleToHome = () => {
+  router.push('/')
+}
+const handleLogout = async () => {
+  try {
+    await store.dispatch('user/logout')
+    router.push('/login')
+  } catch (error) {}
+}
+
+const handleCommand = (commad) => {
+  switch (commad) {
+    case 'home':
+      handleToHome()
+      break
+    case 'logout':
+      handleLogout()
+      break
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -38,9 +66,14 @@ console.log(store.getters.userInfo.avatar)
   height: 50px;
   overflow: hidden;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-
+  .navbar-left {
+    margin-left: 20px;
+  }
   .right-menu {
     display: flex;
     align-items: center;
@@ -53,7 +86,7 @@ console.log(store.getters.userInfo.avatar)
         margin-top: 5px;
         position: relative;
         .el-avatar {
-          --el-avatar-background-color: none;
+          background: none !important;
           margin-right: 12px;
         }
       }
