@@ -1,32 +1,49 @@
 <template>
   <div>
-    <Table :data="dataList" :cols="cols">
-      <template #avatar="{ row }">
-        <el-avatar :src="row.avatar" :size="50"> </el-avatar>
-      </template>
-      <template #time="{ row: { openTime } }">
-        {{ openTime  }}
-      </template>
-      <template #roles="{ row }">
-        <el-tag> {{ row.role[0].title }} </el-tag>
-      </template>
-      <template v-slot:action="{ row }">
-        <el-button @click="orow(row)" type="primary"> 查看</el-button>
-        <el-button @click="orow(row)" type="info"> 角色</el-button>
-        <el-button @click="orow(row)" type="danger"> 删除</el-button>
-      </template>
-    </Table>
+    <el-card>
+      <Table :data="dataList" :cols="cols">
+        <template #avatar="{ row }">
+          <el-avatar :src="row.avatar" :size="50"> </el-avatar>
+        </template>
+        <template #time="{ row: { openTime } }">
+          {{ openTime }}
+        </template>
+        <template #roles="{ row }">
+          <el-tag> {{ row.role[0].title }} </el-tag>
+        </template>
+        <template v-slot:action="{ row }">
+          <el-button @click="orow(row)" type="primary"> 查看</el-button>
+          <el-button @click="orow(row)" type="info"> 角色</el-button>
+          <el-button @click="orow(row)" type="danger"> 删除</el-button>
+        </template>
+      </Table>
+      <br />
+      <pagina-tion
+        @change="change"
+        v-model:total="total"
+        v-model:value="query"
+      ></pagina-tion>
+    </el-card>
   </div>
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue'
+import { reactive, ref } from 'vue'
 import { useStore } from 'vuex'
+import PaginaTion from '../../components/PaginaTion.vue'
 import Table from '../../components/Table.vue'
+import UserApi from '../../api/user'
+import dayjs from 'dayjs'
+const query = ref({
+  page: 1,
+  size: 3
+})
 
 const orow = (row) => {
-  console.log(row, 1111)
+  console.log(row)
 }
+const dataList = ref(null)
+const total = ref(null)
 const store = useStore()
 const cols = reactive([
   { title: '#', type: 'index', width: '50', align: 'center' },
@@ -37,13 +54,23 @@ const cols = reactive([
   { name: 'openTime', title: '开通时间', slot: 'time', align: 'center' },
   { title: '操作', slot: 'action', align: 'center', width: '300' }
 ])
-const getUsers = () => {
-  store.dispatch('user/getUserList')
+const getUsers = async () => {
+  try {
+    const res = await UserApi.getUserManage(query)
+    res.list.forEach((item) => {
+      item.openTime = dayjs((item.openTime / 100) * 100).format('YYYY-MM-DD')
+    })
+    total.value = res.total
+    dataList.value = res.list
+    store.commit('user/setUSerList', res.list)
+  } catch (error) {}
 }
 getUsers()
-
-const dataList = computed(() => {
-  return store.getters.userList
-})
+const change = (obj) => {
+  console.log(obj, 'obj')
+  // query = obj
+  console.log(query, 'query')
+  getUsers()
+}
 </script>
 <style scoped lang="scss"></style>

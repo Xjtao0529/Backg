@@ -1,11 +1,12 @@
 import UserApi from '../../api/user'
 import { setItem, getItem, removeItem } from '../../utils/storeage'
+import { resetRouter } from '../../utils/removeRouter'
 export default {
   namespaced: true,
   state: () => ({
     token: getItem('token') || '',
-    userInfo: getItem('userInfo') || {},
-    userList: getItem('userList') || []
+    userInfo: {},
+    userList: []
   }),
   mutations: {
     setToken(state, token) {
@@ -14,11 +15,10 @@ export default {
     },
     setUSerInfo(state, userInfo) {
       state.userInfo = userInfo
-      setItem('userInfo', userInfo)
     },
     setUSerList(state, userList) {
       state.userList = userList
-      setItem('userList', userList)
+      console.log(userList, 'user')
     }
   },
 
@@ -38,18 +38,25 @@ export default {
       return res
     },
     logout({ commit }) {
+      resetRouter()
       commit('setToken', '')
       commit('setUSerInfo', {})
       removeItem('token')
       removeItem('userInfo')
-    },
-    async getUserList({ commit }, payload) {
-      try {
-        const res = await UserApi.getUserManage(payload)
-        console.log(1)
-        commit('setUSerList', res.list)
-        console.log(res)
-      } catch (error) {}
     }
+    // async getUserList({ commit }, query) {
+    //   console.log(query)
+    //   try {
+    //     const res = await UserApi.getUserManage(query)
+    //     console.log(res)
+    //     res.list.forEach((item) => {
+    //       item.openTime = dayjs((item.openTime / 100) * 100).format(
+    //         'YYYY-MM-DD'
+    //       )
+    //     })
+    //     commit('setUSerList', res.list)
+    //     console.log(res, 'res')
+    //   } catch (error) {}
+    // }
   }
 }

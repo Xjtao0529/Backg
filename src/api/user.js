@@ -17,7 +17,7 @@ const getUserInfo = () => {
 }
 const getUserManage = (data) => {
   return request({
-    url: '/user-manage/all-list ',
+    url: '/user-manage/list',
     method: 'get',
     data
   })

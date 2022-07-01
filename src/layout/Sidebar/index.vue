@@ -5,7 +5,7 @@
       class="tx"
         shape="circle"
         :size="30"
-        :src="store.getters.userInfo.avatar"
+       :src='store.getters.userInfo.avatar'
       ></el-avatar
       >imooc-admin
     </h3>

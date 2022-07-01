@@ -45,6 +45,7 @@ import { useRouter } from 'vue-router'
 import { validatePassword } from './rule'
 import recursion from '../../utils/recursion'
 import { useStore } from 'vuex'
+import { setTimeStamp } from '../../utils/auth'
 const inputType = ref('password')
 const loginForm = reactive({
   username: 'super-admin',
@@ -81,6 +82,7 @@ const handleLoginSubmit = async () => {
       const newlogin = recursion.deeCopy(loginForm)
       newlogin.password = md5(newlogin.password)
       const res = await store.dispatch('user/login', newlogin)
+      setTimeStamp()
       if (res.token) router.push('/')
     }
   })

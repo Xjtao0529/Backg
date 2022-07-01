@@ -6,6 +6,10 @@ import axios from 'axios'
 import md5 from 'md5'
 import loading from './loading'
 import { ElMessage } from 'element-plus'
+import { isCheckTimeout } from '../utils/auth'
+import store from '../store'
+import router from '../router'
+
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: 3000
@@ -16,8 +20,15 @@ service.interceptors.request.use(
     config.headers.icode = icode
     config.headers.codeType = time
     loading.open()
-    const token = localStorage.getItem('token')
-    config.headers.Authorization = `Bearer ${token}`
+    const token = store.getters.token
+    if (token) config.headers.Authorization = `Bearer ${token}`
+
+    if (token) {
+      if (isCheckTimeout()) {
+        store.dispatch('user/logout')
+        router.push('/login')
+      }
+    }
     return config
   },
   (error) => {
@@ -41,6 +52,15 @@ service.interceptors.response.use(
   },
   (error) => {
     loading.close()
+    // TODO token过期状态  401 描述信息  无感知登录 无感知刷新
+    if (
+      error.response &&
+      error.response.data &&
+      error.response.data.code === 401
+    ) {
+      store.dispatch('user/lgout')
+      router.push('/login')
+    }
     _showError(error.message)
     return Promise.reject(error)
   }

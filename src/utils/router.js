@@ -41,6 +41,7 @@ const isNull = (data) => {
 /**
  * 将所有的一级路由数据处理成菜单数据
  */
+
 export const generateMenus = (routes) => {
   const result = []
   routes.forEach((item) => {
@@ -51,10 +52,9 @@ export const generateMenus = (routes) => {
       return
     }
 
-    // 获取三条数据的path路径
     const routePath = item.path
 
-    let route = result.find((item) => item.path === routePath)
+    let route = result.find((route) => route.path === routePath)
 
     if (!route) {
       route = {
@@ -72,80 +72,5 @@ export const generateMenus = (routes) => {
       route.children.push(...generateMenus(item.children))
     }
   })
-
-  console.log(result)
   return result
 }
-
-// /**
-//  * 获取所有的非一级数据
-//  * @param {*} routes
-//  * @returns
-//  */
-// const getChildrenRoutes = (routes) => {
-//   const result = []
-//   routes.forEach((item) => {
-//     if (item.children && item.children.length > 0) {
-//       result.push(...item.children)
-//     }
-//   })
-//   return result
-// }
-
-// /**
-//  * 获取所有的一级数据
-//  * @param {*} routes
-//  * @returns
-//  */
-// export const filterRouters = (routes) => {
-//   const childrenRoutes = getChildrenRoutes(routes)
-//   return routes.filter((route) => {
-//     return !childrenRoutes.find((childrenRoute) => {
-//       return childrenRoute.path === route.path
-//     })
-//   })
-// }
-
-// /**
-//  * 检测对象 以及检测空数据 如果有就返回true
-//  * @param {*} data
-//  * @returns
-//  */
-// const isNull = (data) => {
-//   if (!data) return true
-//   if (JSON.stringify(data) === '{}') return true
-//   if (JSON.stringify(data) === '[]') return true
-//   return false
-// }
-// /**
-//  * 将所有的一级路由数据处理成菜单数据
-//  */
-// export const generateMenus = (routes) => {
-//   const result = []
-//   routes.forEach((item) => {
-//     if (isNull(item.mate) && isNull(item.children)) return
-//     if (isNull(item.meta) && !isNull(item.children)) {
-//       result.push(...generateMenus(item.children))
-//       return
-//     }
-
-//     const routePath = item.path
-
-//     let route = result.find((item) => item.path === routePath)
-//     if (!route) {
-//       route = {
-//         ...item,
-//         path: routePath,
-//         children: []
-//       }
-//       if (item.meta.item && item.meta.icon) {
-//         result.push(route)
-//       }
-//     }
-//     if (item.children) {
-//       route.children.push(...generateMenus(item.children))
-//     }
-//   })
-//   console.log(result)
-//   return result
-// }

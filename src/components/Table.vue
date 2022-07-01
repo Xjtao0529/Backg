@@ -31,6 +31,9 @@ const props = defineProps({
     type: Array,
     required: true,
     defaul: () => []
+  },
+  total: {
+    type: Number
   }
 })
 </script>
