@@ -34,7 +34,7 @@ import PaginaTion from '../../components/PaginaTion.vue'
 import Table from '../../components/Table.vue'
 import UserApi from '../../api/user'
 import dayjs from 'dayjs'
-const query = ref({
+const query = reactive({
   page: 1,
   size: 3
 })
@@ -42,7 +42,7 @@ const query = ref({
 const orow = (row) => {
   console.log(row)
 }
-const dataList = ref(null)
+const dataList = ref([])
 const total = ref(null)
 const store = useStore()
 const cols = reactive([
@@ -68,7 +68,9 @@ const getUsers = async () => {
 getUsers()
 const change = (obj) => {
   console.log(obj, 'obj')
-  // query = obj
+  query.page = obj.page
+  query.size = obj.size
+
   console.log(query, 'query')
   getUsers()
 }
