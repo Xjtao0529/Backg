@@ -12,17 +12,13 @@
           <el-tag> {{ row.role[0].title }} </el-tag>
         </template>
         <template v-slot:action="{ row }">
-          <el-button @click="orow(row)" type="primary"> 查看</el-button>
+          <el-button @click="detail(row._id)" type="primary"> 查看</el-button>
           <el-button @click="orow(row)" type="info"> 角色</el-button>
           <el-button @click="orow(row)" type="danger"> 删除</el-button>
         </template>
       </Table>
       <br />
-      <pagina-tion
-        @change="change"
-        v-model:total="total"
-        v-model:value="query"
-      ></pagina-tion>
+      <pagina-tion @change="change" :total="total" :value="query"></pagina-tion>
     </el-card>
   </div>
 </template>
@@ -34,6 +30,9 @@ import PaginaTion from '../../components/PaginaTion.vue'
 import Table from '../../components/Table.vue'
 import UserApi from '../../api/user'
 import dayjs from 'dayjs'
+import router from '../../router'
+// import { useRouter } from 'vue-router'
+// const routers = useRouter()
 const query = reactive({
   page: 1,
   size: 3
@@ -43,7 +42,7 @@ const orow = (row) => {
   console.log(row)
 }
 const dataList = ref([])
-const total = ref(null)
+const total = ref('')
 const store = useStore()
 const cols = reactive([
   { title: '#', type: 'index', width: '50', align: 'center' },
@@ -70,9 +69,12 @@ const change = (obj) => {
   console.log(obj, 'obj')
   query.page = obj.page
   query.size = obj.size
-
   console.log(query, 'query')
   getUsers()
+}
+const detail = (id) => {
+  console.log(id, 'detail')
+  router.push('/user/info/' + id)
 }
 </script>
 <style scoped lang="scss"></style>

@@ -4,6 +4,7 @@ export default {
   path: '/user',
   component: Layout,
   name: 'userManage',
+  redirect: '/user/manage',
   meta: {
     title: '用户',
     icon: 'personnel'
@@ -22,7 +23,8 @@ export default {
       name: 'userInfo',
       component: () => import('@/views/user-info/index'),
       meta: {
-        title: '员工信息'
+        title: '员工信息',
+        icon: ''
       }
     },
     {

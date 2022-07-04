@@ -3,7 +3,7 @@ import Layout from '../../layout'
 export default {
   path: '/article',
   component: Layout,
-  name: 'articleCreate',
+  name: 'articleRanking',
   meta: {
     title: '文章',
     icon: 'article'

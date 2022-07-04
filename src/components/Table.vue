@@ -1,6 +1,12 @@
 <template>
   <div>
-    <el-table :data="props.data" border style="width: 100%">
+    <el-table
+      :data="props.data"
+      border
+      default-expand-all
+      :row-key="RowKey"
+      style="width: 100%"
+    >
       <el-table-column
         v-for="item in props.cols"
         :key="item"
@@ -22,15 +28,19 @@
 <script setup>
 import { defineProps } from 'vue'
 const props = defineProps({
+  RowKey: {
+    type: String,
+    default: 'id'
+  },
   data: {
     type: Array,
     required: true,
-    defaul: () => []
+    default: () => []
   },
   cols: {
     type: Array,
     required: true,
-    defaul: () => []
+    default: () => []
   },
   total: {
     type: Number

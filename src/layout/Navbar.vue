@@ -1,6 +1,9 @@
 <template>
   <div class="navbar">
-    <div class="navbar-left">LEFT</div>
+    <div class="navbar-left">
+      <Hamburger></Hamburger>
+      <Breadcrumb></Breadcrumb>
+    </div>
     <div class="right-menu">
       <!-- 头像 -->
       <el-dropdown
@@ -31,6 +34,8 @@
 </template>
 
 <script setup>
+import Hamburger from '../components/Hamburger.vue'
+import Breadcrumb from '../components/Breadcrumb.vue'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -72,7 +77,8 @@ const handleCommand = (commad) => {
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   .navbar-left {
-    margin-left: 20px;
+    display: flex;
+    align-items: center;
   }
   .right-menu {
     display: flex;

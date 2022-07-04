@@ -1,5 +1,10 @@
 import UserApi from '../../api/user'
-import { setItem, getItem, removeItem } from '../../utils/storeage'
+import {
+  setItem,
+  getItem,
+  // removeItem,
+  removeAllItem
+} from '../../utils/storeage'
 import { resetRouter } from '../../utils/removeRouter'
 export default {
   namespaced: true,
@@ -41,8 +46,9 @@ export default {
       resetRouter()
       commit('setToken', '')
       commit('setUSerInfo', {})
-      removeItem('token')
-      removeItem('userInfo')
+      // removeItem('token')
+      // removeItem('userInfo')
+      removeAllItem()
     }
     // async getUserList({ commit }, query) {
     //   console.log(query)
